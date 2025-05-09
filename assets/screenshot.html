@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress Debug Switcher Preview</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dashicons/0.9.0/css/dashicons.min.css">
+    <style>
+        /* WP Admin styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            color: #444;
+            background-color: #f0f0f1;
+            margin: 0;
+            padding: 0;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .wp-admin {
+            position: relative;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+        
+        .wrap {
+            margin: 10px 20px 0 2px;
+        }
+        
+        /* ====== Page Header ====== */
+        .wp-debug-switcher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f1;
+        }
+
+        .wp-debug-switcher-header h1 {
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin: 0;
+            color: #1d2327;
+        }
+
+        .wp-debug-switcher-header h1 .dashicons {
+            font-size: 1.7rem;
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            color: #2271b1;
+        }
+
+        .wp-debug-status-summary {
+            display: flex;
+            gap: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-enabled {
+            background-color: #edfaef;
+            color: #46b450;
+            border: 1px solid rgba(70, 180, 80, 0.2);
+        }
+
+        .status-disabled {
+            background-color: #fbeaea;
+            color: #dc3232;
+            border: 1px solid rgba(220, 50, 50, 0.2);
+        }
+
+        .status-item .dashicons {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+
+        .status-label {
+            font-family: Consolas, Monaco, monospace;
+        }
+
+        .wp-debug-intro {
+            background-color: #f0f6fc;
+            border-left: 4px solid #72aee6;
+            padding: 15px 20px;
+            margin-bottom: 24px;
+            border-radius: 3px;
+        }
+
+        .wp-debug-intro p {
+            margin: 0;
+            font-size: 14px;
+            color: #1d2327;
+        }
+
+        /* ====== Main Container ====== */
+        .wp-debug-switcher-container {
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        /* ====== Card Headers ====== */
+        .wp-debug-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .wp-debug-card-header .dashicons {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #2271b1;
+        }
+
+        .wp-debug-card-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0;
+            color: #1d2327;
+        }
+
+        /* ====== Settings Panel ====== */
+        .wp-debug-switcher-settings {
+            flex: 1;
+            min-width: 320px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e4e7;
+        }
+
+        /* ====== Log Viewer Panel ====== */
+        .wp-debug-switcher-log-viewer {
+            flex: 1.5;
+            min-width: 320px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e4e7;
+        }
+        
+        /* Form table */
+        .form-table {
+            border-collapse: collapse;
+            margin-top: 0.5em;
+            width: 100%;
+            clear: both;
+        }
+        
+        .form-table th {
+            vertical-align: top;
+            text-align: left;
+            padding: 20px 10px 20px 0;
+            width: 200px;
+            line-height: 1.3;
+            font-weight: 600;
+        }
+        
+        .form-table td {
+            margin-bottom: 9px;
+            padding: 15px 10px;
+            line-height: 1.3;
+            vertical-align: middle;
+        }
+        
+        .form-table tr {
+            border-bottom: 1px solid #f0f0f1;
+        }
+        
+        .form-table tr:last-child {
+            border-bottom: none;
+        }
+        
+        /* Toggle Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+            vertical-align: middle;
+            margin-right: 12px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e0e0e0;
+            transition: .3s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider.checked {
+            background-color: #2271b1;
+        }
+
+        .slider.checked:before {
+            transform: translateX(30px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 30px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        /* Status Indicators */
+        .status-indicator {
+            display: inline-block;
+            font-weight: 600;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-size: 13px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-on {
+            color: #fff;
+            background-color: #46b450;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-off {
+            color: #fff;
+            background-color: #dc3232;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .actual-setting {
+            margin-top: 8px;
+            color: #666;
+            font-style: italic;
+            background-color: #f8f8f8;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 13px;
+            border-left: 3px solid #ddd;
+        }
+        
+        .description {
+            margin-top: 8px;
+            color: #646970;
+            font-style: normal;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        /* Log Viewer */
+        .log-actions {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .log-actions button {
+            display: flex;
+            align-items: center;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            background-color: #f0f0f1;
+            border: 1px solid #c3c4c7;
+            color: #3c434a;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .log-actions button .dashicons {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+        }
+        
+        .log-actions #refresh-log {
+            color: #2271b1;
+            border-color: #2271b1;
+        }
+        
+        .log-actions #clear-log {
+            color: #b32d2e;
+            border-color: #b32d2e;
+        }
+        
+        .debug-log-content {
+            background: #1e1e1e;
+            color: #eee;
+            font-family: Consolas, Monaco, monospace;
+            padding: 15px;
+            border-radius: 5px;
+            height: 400px;
+            overflow-y: auto;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 13px;
+            line-height: 1.6;
+            border: 1px solid #191f25;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .log-line-wrap {
+            position: relative;
+            padding-left: 50px;
+            min-height: 18px;
+            line-height: 18px;
+        }
+
+        .line-number {
+            position: absolute;
+            left: 0;
+            width: 40px;
+            text-align: right;
+            color: #606770;
+            background: #1e1e1e;
+            padding: 0 5px;
+            user-select: none;
+            font-size: 0.85em;
+            opacity: 0.6;
+        }
+        
+        .log-error {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .log-notice {
+            color: #feca57;
+        }
+
+        .log-info {
+            color: #54a0ff;
+        }
+
+        .log-path {
+            color: #ff9f43;
+            text-decoration: underline;
+        }
+
+        .log-line {
+            color: #5352ed;
+            font-weight: bold;
+        }
+        
+        .log-file-info {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .log-file-info .dashicons {
+            font-size: 16px;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            color: #2271b1;
+        }
+
+        .log-file-info code {
+            background: #f0f0f1;
+            padding: 3px 5px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+        
+        /* Help Section */
+        .wp-debug-help-section {
+            margin-top: 30px;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e4e7;
+        }
+
+        .wp-debug-help-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .wp-debug-help-header .dashicons {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            color: #2271b1;
+        }
+
+        .wp-debug-help-header h2 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin: 0;
+            color: #1d2327;
+        }
+
+        .wp-debug-help-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .help-column {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .help-column h3 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #1d2327;
+        }
+
+        .help-column ul {
+            margin-left: 20px;
+        }
+
+        .help-column li {
+            margin-bottom: 10px;
+        }
+
+        .help-column p {
+            margin-top: 0;
+        }
+        
+        /* Submit button */
+        .submit {
+            margin-top: 20px;
+            padding: 10px 0;
+            text-align: right;
+        }
+        
+        .button-primary {
+            background: #2271b1;
+            border-color: #2271b1;
+            color: #fff;
+            padding: 0 10px;
+            font-size: 13px;
+            line-height: 2.15384615;
+            min-height: 30px;
+            border-width: 1px;
+            border-style: solid;
+            border-radius: 3px;
+            cursor: pointer;
+            text-decoration: none;
+            text-shadow: none;
+            display: inline-block;
+        }
+        
+        /* Code Snippet */
+        .wp-debug-code-snippet {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid #e2e4e7;
+            position: relative;
+        }
+
+        .wp-debug-code-snippet pre {
+            margin: 0;
+            white-space: pre-wrap;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #3c434a;
+        }
+
+        .wp-debug-code-snippet:before {
+            content: "wp-config.php";
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #fff;
+            padding: 0 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            border: 1px solid #e2e4e7;
+            border-radius: 3px;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #f0f0f1;
+            border: 1px solid #c3c4c7;
+            border-radius: 3px;
+            color: #3c434a;
+            font-size: 12px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+        
+        /* Auto-refresh toggle */
+        .auto-refresh-toggle {
+            margin-left: auto;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .auto-refresh-toggle input {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body class="wp-admin">
+    <div class="wrap">
+        <div class="wp-debug-switcher-header">
+            <h1><span class="dashicons dashicons-admin-tools"></span> WordPress Debug Mode Switcher</h1>
+            <div class="wp-debug-status-summary">
+                <div class="status-item status-enabled">
+                    <span class="dashicons dashicons-yes-alt"></span>
+                    <span class="status-label">WP_DEBUG</span>
+                </div>
+                <div class="status-item status-enabled">
+                    <span class="dashicons dashicons-yes-alt"></span>
+                    <span class="status-label">WP_DEBUG_LOG</span>
+                </div>
+                <div class="status-item status-disabled">
+                    <span class="dashicons dashicons-no-alt"></span>
+                    <span class="status-label">SCRIPT_DEBUG</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wp-debug-intro">
+            <p>This plugin allows you to toggle WordPress debugging options without editing the wp-config.php file directly. After saving your preferences, these settings will be used for all future page loads.</p>
+        </div>
+        
+        <div class="wp-debug-switcher-container">
+            <div class="wp-debug-switcher-settings">
+                <div class="wp-debug-card-header">
+                    <span class="dashicons dashicons-admin-settings"></span>
+                    <h2>Debug Settings</h2>
+                </div>
+                <form action="options.php" method="post">
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row">WP_DEBUG</th>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round checked"></span>
+                                </label>
+                                <span class="status-indicator status-on">Enabled</span>
+                                <p class="description">Enables WordPress debug mode. Shows PHP errors, warnings, and notices.</p>
+                                <p class="actual-setting">Current wp-config.php setting: <strong>Enabled</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">WP_DEBUG_LOG</th>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" checked>
+                                    <span class="slider round checked"></span>
+                                </label>
+                                <span class="status-indicator status-on">Enabled</span>
+                                <p class="description">Logs all PHP errors to wp-content/debug.log file.</p>
+                                <p class="actual-setting">Current wp-config.php setting: <strong>Enabled</strong></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">SCRIPT_DEBUG</th>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="status-indicator status-off">Disabled</span>
+                                <p class="description">Loads unminified versions of JavaScript and CSS files. Useful for debugging.</p>
+                                <p class="actual-setting">Current wp-config.php setting: <strong>Disabled</strong></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="submit">
+                        <button type="submit" class="button-primary">Save Debug Settings</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="wp-debug-switcher-log-viewer">
+                <div class="wp-debug-card-header">
+                    <span class="dashicons dashicons-text-page"></span>
+                    <h2>Debug Log Viewer</h2>
+                </div>
+                
+                <div class="log-actions">
+                    <button id="refresh-log" class="button button-secondary">
+                        <span class="dashicons dashicons-update"></span> Refresh Log
+                    </button>
+                    <button id="clear-log" class="button button-secondary">
+                        <span class="dashicons dashicons-trash"></span> Clear Log
+                    </button>
+                    <label class="auto-refresh-toggle">
+                        <input type="checkbox" id="auto-refresh"> Auto-refresh (10s)
+                    </label>
+                </div>
+                
+                <div id="debug-log-content" class="debug-log-content">
+                    <div class="log-line-wrap"><span class="line-number">1</span>[<span class="log-info">06-May-2023 14:21:33 UTC</span>] <span class="log-notice">PHP Notice</span>:  Undefined variable: test in <span class="log-path">/var/www/html/wp-content/themes/twentytwentyone/functions.php</span> <span class="log-line">on line 420</span></div>
+                    <div class="log-line-wrap"><span class="line-number">2</span>[<span class="log-info">06-May-2023 14:22:45 UTC</span>] <span class="log-error">PHP Fatal error</span>:  Uncaught Error: Call to undefined function get_header_image() in <span class="log-path">/var/www/html/wp-content/themes/mytheme/header.php</span>:<span class="log-line">25</span></div>
+                    <div class="log-line-wrap"><span class="line-number">3</span>Stack trace:</div>
+                    <div class="log-line-wrap"><span class="line-number">4</span>#0 <span class="log-path">/var/www/html/wp-includes/template.php</span>(<span class="log-line">770</span>): include()</div>
+                    <div class="log-line-wrap"><span class="line-number">5</span>#1 <span class="log-path">/var/www/html/wp-includes/template.php</span>(<span class="log-line">716</span>): load_template('/var/www/html/w...', false, Array)</div>
+                    <div class="log-line-wrap"><span class="line-number">6</span>#2 <span class="log-path">/var/www/html/wp-includes/general-template.php</span>(<span class="log-line">48</span>): locate_template(Array, true, false, Array)</div>
+                    <div class="log-line-wrap"><span class="line-number">7</span>#3 <span class="log-path">/var/www/html/wp-content/themes/mytheme/index.php</span>(<span class="log-line">17</span>): get_header()</div>
+                    <div class="log-line-wrap"><span class="line-number">8</span>#4 <span class="log-path">/var/www/html/wp-includes/template-loader.php</span>(<span class="log-line">106</span>): include('/var/www/html/w...')</div>
+                    <div class="log-line-wrap"><span class="line-number">9</span>#5 <span class="log-path">/var/www/html/wp-blog-header.php</span>(<span class="log-line">19</span>): require_once('/var/www/html/w...')</div>
+                    <div class="log-line-wrap"><span class="line-number">10</span>#6 <span class="log-path">/var/www/html/index.php</span>(<span class="log-line">17</span>): require('/var/www/html/w...')</div>
+                    <div class="log-line-wrap"><span class="line-number">11</span>#7 {main}</div>
+                    <div class="log-line-wrap"><span class="line-number">12</span>  thrown in <span class="log-path">/var/www/html/wp-content/themes/mytheme/header.php</span> <span class="log-line">on line 25</span></div>
+                    <div class="log-line-wrap"><span class="line-number">13</span>[<span class="log-info">06-May-2023 14:28:10 UTC</span>] <span class="log-notice">PHP Deprecated</span>:  Function create_function() is deprecated in <span class="log-path">/var/www/html/wp-content/plugins/outdated-plugin/main.php</span> <span class="log-line">on line 123</span></div>
+                </div>
+                
+                <div class="log-file-info">
+                    <span class="dashicons dashicons-info"></span>
+                    Log file location: <code>/var/www/html/wp-content/debug.log</code>
+                </div>
+            </div>
+        </div>
+        
+        <div class="wp-debug-help-section">
+            <div class="wp-debug-help-header">
+                <span class="dashicons dashicons-editor-help"></span>
+                <h2>WordPress Debug Mode Quick Guide</h2>
+            </div>
+            <div class="wp-debug-help-content">
+                <div class="help-column">
+                    <h3>What does each option do?</h3>
+                    <ul>
+                        <li><strong>WP_DEBUG</strong> - When enabled, WordPress will display all PHP errors, warnings, and notices.</li>
+                        <li><strong>WP_DEBUG_LOG</strong> - When enabled, errors will be logged to wp-content/debug.log.</li>
+                        <li><strong>SCRIPT_DEBUG</strong> - When enabled, WordPress will use development versions of CSS and JavaScript files (unminified).</li>
+                    </ul>
+                </div>
+                <div class="help-column">
+                    <h3>Configuration in wp-config.php</h3>
+                    <p>After activating this plugin, you need to add the following code to your wp-config.php file to make it work:</p>
+                    <div class="wp-debug-code-snippet">
+                        <pre>if ( function_exists( 'get_option' ) ) {
+    define( 'WP_DEBUG', (bool) get_option( 'wp_debug_switcher_options' )['wp_debug'] );
+    define( 'WP_DEBUG_LOG', (bool) get_option( 'wp_debug_switcher_options' )['wp_debug_log'] );
+    define( 'SCRIPT_DEBUG', (bool) get_option( 'wp_debug_switcher_options' )['script_debug'] );
+} else {
+    define( 'WP_DEBUG', false );
+    define( 'WP_DEBUG_LOG', false );
+    define( 'SCRIPT_DEBUG', false );
+}</pre>
+                        <button class="copy-button">Copy Code</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
