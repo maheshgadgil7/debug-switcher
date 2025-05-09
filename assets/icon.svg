@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect x="0" y="0" width="128" height="128" rx="8" fill="#2271b1"/>
+  
+  <!-- Debug console window -->
+  <rect x="14" y="14" width="100" height="100" rx="4" fill="#ffffff"/>
+  <rect x="14" y="14" width="100" height="20" rx="4" fill="#2271b1"/>
+  
+  <!-- Window control buttons -->
+  <circle cx="24" cy="24" r="5" fill="#ff6b6b"/>
+  <circle cx="39" cy="24" r="5" fill="#feca57"/>
+  <circle cx="54" cy="24" r="5" fill="#46b450"/>
+  
+  <!-- Debug text content -->
+  <rect x="24" y="45" width="80" height="6" rx="2" fill="#e0e0e0"/>
+  <rect x="24" y="57" width="50" height="6" rx="2" fill="#ff6b6b"/>
+  <rect x="24" y="69" width="65" height="6" rx="2" fill="#e0e0e0"/>
+  <rect x="24" y="81" width="40" height="6" rx="2" fill="#feca57"/>
+  <rect x="24" y="93" width="60" height="6" rx="2" fill="#54a0ff"/>
+  
+  <!-- Toggle switch -->
+  <rect x="76" y="80" width="28" height="14" rx="7" fill="#46b450"/>
+  <circle cx="93" cy="87" r="6" fill="#ffffff"/>
+  
+  <!-- Gear icon -->
+  <g transform="translate(87, 62) scale(0.02)">
+    <path d="M512 256c0 141.4-114.6 256-256 256S0 397.4 0 256 114.6 0 256 0s256 114.6 256 256zM232 120V256c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z" fill="#3c434a"/>
+  </g>
+</svg>
