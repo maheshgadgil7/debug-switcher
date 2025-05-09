@@ -1,0 +1,919 @@
+/**
+ * Admin styles for the WP Debug Switcher plugin
+ * Neumorphism 2.0 UI with vibrant colors
+ *
+ * @link       https://example.com
+ * @since      1.0.0
+ *
+ * @package    Wp_Debug_Switcher
+ * @subpackage Wp_Debug_Switcher/admin/css
+ */
+
+/* ====== Color Variables ====== */
+:root {
+    --primary-color: #6200ee;         /* Vibrant Purple */
+    --primary-light: #bb86fc;         /* Light Purple */
+    --primary-dark: #3700b3;          /* Dark Purple */
+    --secondary-color: #03dac6;       /* Teal */
+    --secondary-dark: #018786;        /* Dark Teal */
+    --error-color: #cf6679;           /* Red Pink */
+    --success-color: #00c853;         /* Vibrant Green */
+    --warning-color: #ffb74d;         /* Orange */
+    --info-color: #64b5f6;            /* Blue */
+    --background-light: #f3f3f3;      /* Light Background for Neumorphism */
+    --text-primary: #1d1d1d;          /* Primary Text */
+    --text-secondary: #666666;        /* Secondary Text */
+    --text-light: #ffffff;            /* Light Text */
+    --shadow-light: rgba(255, 255, 255, 0.8);  /* Light Shadow */
+    --shadow-dark: rgba(0, 0, 0, 0.1);         /* Dark Shadow */
+    --border-radius: 16px;             /* Rounded corners for Neumorphism */
+    --code-background: #292d3e;       /* Dark background for code */
+    --code-text: #babed8;             /* Light text for code */
+    --code-accent: #ffcb6b;           /* Accent for code highlights */
+}
+
+/* ====== Global Styles ====== */
+.wrap {
+    background-color: var(--background-light);
+    padding: 20px;
+    border-radius: var(--border-radius);
+}
+
+/* ====== Page Header ====== */
+.wp-debug-switcher-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba(98, 0, 238, 0.1);
+}
+
+.wp-debug-switcher-header h1 {
+    display: flex;
+    align-items: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--primary-color);
+    text-shadow: 1px 1px 1px var(--shadow-light);
+}
+
+.wp-debug-switcher-header h1 .dashicons {
+    font-size: 1.8rem;
+    width: 34px;
+    height: 34px;
+    margin-right: 12px;
+    color: var(--primary-color);
+    background: var(--background-light);
+    padding: 8px;
+    border-radius: 50%;
+    box-shadow: 6px 6px 12px var(--shadow-dark), 
+               -6px -6px 12px var(--shadow-light);
+}
+
+.wp-debug-status-summary {
+    display: flex;
+    gap: 12px;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    border-radius: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.status-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 10px var(--shadow-dark), 
+               -6px -6px 10px var(--shadow-light);
+}
+
+.status-enabled {
+    background: linear-gradient(145deg, #00d45a, #00b34d);
+    color: var(--text-light);
+    border: none;
+}
+
+.status-disabled {
+    background: linear-gradient(145deg, #e76a7a, #c25769);
+    color: var(--text-light);
+    border: none;
+}
+
+.status-item .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+}
+
+.status-label {
+    font-family: 'Roboto Mono', Consolas, Monaco, monospace;
+    letter-spacing: 0.5px;
+}
+
+.wp-debug-intro {
+    background: var(--background-light);
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.wp-debug-intro:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 6px;
+    background: linear-gradient(to bottom, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+.wp-debug-intro p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding-left: 10px;
+}
+
+/* ====== Main Container ====== */
+.wp-debug-switcher-container {
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+/* ====== Card Headers ====== */
+.wp-debug-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(98, 0, 238, 0.1);
+}
+
+.wp-debug-card-header .dashicons {
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    color: var(--primary-color);
+    background: var(--background-light);
+    padding: 9px;
+    border-radius: 50%;
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+}
+
+.wp-debug-card-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--primary-color);
+    text-shadow: 1px 1px 1px var(--shadow-light);
+}
+
+/* ====== Settings Panel ====== */
+.wp-debug-switcher-settings {
+    flex: 1;
+    min-width: 350px;
+    background: var(--background-light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 8px 8px 16px var(--shadow-dark), 
+               -8px -8px 16px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.wp-debug-switcher-settings:hover {
+    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                -10px -10px 20px var(--shadow-light);
+}
+
+.wp-debug-switcher-settings form {
+    max-width: 100%;
+}
+
+.wp-debug-switcher-settings .form-table {
+    margin-top: 0;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+
+.wp-debug-switcher-settings .form-table th {
+    font-weight: 600;
+    color: var(--primary-dark);
+    padding: 20px 15px 20px 0;
+    width: 200px;
+    font-size: 15px;
+}
+
+.wp-debug-switcher-settings .form-table td {
+    padding: 20px 15px;
+    position: relative;
+    background: var(--background-light);
+    border-radius: 12px;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+}
+
+.wp-debug-switcher-settings .form-table tr {
+    transition: all 0.3s ease;
+}
+
+.wp-debug-switcher-settings .form-table tr:hover {
+    transform: translateY(-2px);
+}
+
+.wp-debug-switcher-settings .submit {
+    margin-top: 30px;
+    padding: 10px 0;
+    text-align: right;
+}
+
+.wp-debug-switcher-settings .submit .button-primary {
+    background: linear-gradient(145deg, var(--primary-color), var(--primary-dark));
+    border: none;
+    color: var(--text-light);
+    padding: 10px 24px;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border-radius: 30px;
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+    cursor: pointer;
+    outline: none;
+    height: auto;
+}
+
+.wp-debug-switcher-settings .submit .button-primary:hover {
+    background: linear-gradient(145deg, var(--primary-light), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px var(--shadow-dark), 
+               -6px -6px 12px var(--shadow-light);
+}
+
+.wp-debug-switcher-settings .submit .button-primary:active {
+    background: var(--primary-dark);
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), 
+                inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+    transform: translateY(0);
+}
+
+/* ====== Log Viewer Panel ====== */
+.wp-debug-switcher-log-viewer {
+    flex: 1.5;
+    min-width: 350px;
+    background: var(--background-light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 8px 8px 16px var(--shadow-dark), 
+               -8px -8px 16px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.wp-debug-switcher-log-viewer:hover {
+    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                -10px -10px 20px var(--shadow-light);
+}
+
+/* ====== Toggle Switch Styles ====== */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 64px;
+    height: 34px;
+    vertical-align: middle;
+    margin-right: 15px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--background-light);
+    transition: .4s;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    transition: .4s;
+    box-shadow: 3px 3px 6px var(--shadow-dark);
+}
+
+input:checked + .slider {
+    background: linear-gradient(145deg, var(--primary-light), var(--primary-color));
+}
+
+input:focus + .slider {
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.2), 
+                inset -4px -4px 8px rgba(255, 255, 255, 0.1);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+    background: #ffffff;
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* ====== Status Indicator ====== */
+.status-indicator {
+    display: inline-block;
+    font-weight: 600;
+    margin-left: 15px;
+    vertical-align: middle;
+    font-size: 13px;
+    padding: 5px 12px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 3px 3px 6px var(--shadow-dark), 
+               -3px -3px 6px var(--shadow-light);
+}
+
+.status-on {
+    color: var(--text-light);
+    background: linear-gradient(145deg, var(--success-color), #00a243);
+}
+
+.status-off {
+    color: var(--text-light);
+    background: linear-gradient(145deg, var(--error-color), #b55a69);
+}
+
+.actual-setting {
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+    background: var(--background-light);
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 13px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), 
+                inset -3px -3px 6px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.actual-setting:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 4px;
+    background: linear-gradient(to bottom, var(--secondary-color), var(--secondary-dark));
+    border-radius: 2px;
+}
+
+.actual-setting:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+}
+
+/* ====== Description Text ====== */
+.description {
+    margin-top: 12px;
+    color: var(--text-secondary);
+    font-style: normal;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ====== Code Snippet ====== */
+.wp-debug-code-snippet {
+    background: var(--code-background);
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow-x: auto;
+    position: relative;
+    box-shadow: 6px 6px 12px var(--shadow-dark), 
+               -6px -6px 12px var(--shadow-light);
+}
+
+.wp-debug-code-snippet pre {
+    margin: 0;
+    white-space: pre-wrap;
+    font-family: 'Roboto Mono', Consolas, Monaco, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--code-text);
+}
+
+.wp-debug-code-snippet:before {
+    content: "wp-config.php";
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    background: var(--code-accent);
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--code-background);
+    border-radius: 20px;
+    box-shadow: 3px 3px 6px var(--shadow-dark);
+}
+
+/* ====== Debug Log Viewer ====== */
+.debug-log-content {
+    background: var(--code-background);
+    color: var(--code-text);
+    font-family: 'Roboto Mono', Consolas, Monaco, monospace;
+    padding: 20px;
+    border-radius: 12px;
+    height: 400px;
+    overflow-y: auto;
+    margin-top: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 14px;
+    line-height: 1.6;
+    box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3), 
+                inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+}
+
+.log-actions {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.log-actions button {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--background-light);
+    border: none;
+    color: var(--text-primary);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+}
+
+.log-actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 6px 6px 12px var(--shadow-dark), 
+               -6px -6px 12px var(--shadow-light);
+}
+
+.log-actions button:active {
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+    transform: translateY(0);
+}
+
+.log-actions button .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+}
+
+.log-actions #refresh-log {
+    color: var(--primary-color);
+}
+
+.log-actions #refresh-log:hover {
+    background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+    color: var(--primary-dark);
+}
+
+.log-actions #clear-log {
+    color: var(--error-color);
+}
+
+.log-actions #clear-log:hover {
+    background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
+    color: #b55a69;
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading .spinner {
+    float: none;
+    margin: 0 0 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.log-file-info {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: var(--background-light);
+    padding: 10px 15px;
+    border-radius: 25px;
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), 
+                inset -3px -3px 6px var(--shadow-light);
+}
+
+.log-file-info .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    color: var(--info-color);
+}
+
+.log-file-info code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-family: 'Roboto Mono', Consolas, Monaco, monospace;
+    margin-left: 5px;
+}
+
+/* Empty log state */
+.wp-debug-log-placeholder {
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-light);
+    border-radius: 12px;
+    margin-top: 20px;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+}
+
+.wp-debug-log-empty {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 30px;
+}
+
+.wp-debug-log-empty .dashicons {
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    margin-bottom: 20px;
+    color: var(--primary-light);
+    opacity: 0.7;
+}
+
+.wp-debug-log-empty p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--primary-dark);
+}
+
+.setup-steps {
+    text-align: left;
+    margin: 0;
+    padding-left: 25px;
+}
+
+.setup-steps li {
+    margin-bottom: 12px;
+    font-size: 14px;
+    position: relative;
+    list-style-type: none;
+    padding-left: 25px;
+}
+
+.setup-steps li:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-light);
+    border-radius: 50%;
+}
+
+.setup-steps li:after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 17px;
+    width: 2px;
+    height: calc(100% - 10px);
+    background: var(--primary-light);
+    opacity: 0.5;
+}
+
+.setup-steps li:last-child:after {
+    display: none;
+}
+
+/* ====== Help Section ====== */
+.wp-debug-help-section {
+    margin-top: 40px;
+    background: var(--background-light);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 8px 8px 16px var(--shadow-dark), 
+               -8px -8px 16px var(--shadow-light);
+    transition: all 0.3s ease;
+}
+
+.wp-debug-help-section:hover {
+    box-shadow: 10px 10px 20px var(--shadow-dark), 
+                -10px -10px 20px var(--shadow-light);
+}
+
+.wp-debug-help-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(98, 0, 238, 0.1);
+}
+
+.wp-debug-help-header .dashicons {
+    font-size: 22px;
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    color: var(--secondary-color);
+    background: var(--background-light);
+    padding: 9px;
+    border-radius: 50%;
+    box-shadow: 4px 4px 8px var(--shadow-dark), 
+               -4px -4px 8px var(--shadow-light);
+}
+
+.wp-debug-help-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin: 0;
+    color: var(--secondary-dark);
+    text-shadow: 1px 1px 1px var(--shadow-light);
+}
+
+.wp-debug-help-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.help-column {
+    flex: 1;
+    min-width: 300px;
+    background: var(--background-light);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+}
+
+.help-column h3 {
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--secondary-dark);
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(3, 218, 198, 0.2);
+}
+
+.help-column ul {
+    margin-left: 20px;
+    padding-left: 0;
+}
+
+.help-column li {
+    margin-bottom: 15px;
+    font-size: 14px;
+    position: relative;
+    list-style-type: none;
+    padding-left: 25px;
+    line-height: 1.6;
+}
+
+.help-column li:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+}
+
+.help-column li strong {
+    color: var(--primary-dark);
+}
+
+.help-column p {
+    margin-top: 0;
+    line-height: 1.6;
+}
+
+/* Inline notices */
+.notice.inline {
+    margin: 0 0 20px;
+    background: var(--background-light);
+    border-radius: 12px;
+    box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                inset -4px -4px 8px var(--shadow-light);
+    border-left: none;
+    padding: 12px 15px;
+}
+
+.notice.inline p {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    line-height: 1.6;
+}
+
+.notice.inline .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    color: var(--info-color);
+}
+
+/* Log highlighting */
+.log-error {
+    color: #ff5370;
+    font-weight: bold;
+}
+
+.log-notice {
+    color: #ffcb6b;
+}
+
+.log-info {
+    color: #82aaff;
+}
+
+.log-path {
+    color: #c3e88d;
+    text-decoration: underline;
+}
+
+.log-line {
+    color: #f78c6c;
+    font-weight: bold;
+}
+
+.log-line-wrap {
+    position: relative;
+    padding-left: 50px;
+    min-height: 20px;
+    line-height: 20px;
+}
+
+.line-number {
+    position: absolute;
+    left: 0;
+    width: 40px;
+    text-align: right;
+    color: #546e7a;
+    background: var(--code-background);
+    padding: 0 5px;
+    user-select: none;
+    font-size: 0.85em;
+    opacity: 0.6;
+}
+
+/* ====== Attribution styles ====== */
+.attribution-option {
+    margin-top: 30px;
+    border-top: 1px solid rgba(98, 0, 238, 0.1);
+    padding-top: 20px;
+    text-align: right;
+}
+
+.attribution-switch {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+.attribution-text {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-left: 8px;
+}
+
+.attribution-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.attribution-text a:hover {
+    color: var(--primary-light);
+    text-decoration: underline;
+}
+
+/* ====== Responsive adjustments ====== */
+@media screen and (max-width: 782px) {
+    .wp-debug-switcher-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .wp-debug-status-summary {
+        margin-top: 20px;
+    }
+    
+    .wp-debug-switcher-settings .form-table th {
+        width: 100%;
+        display: block;
+        padding-bottom: 10px;
+    }
+    
+    .wp-debug-switcher-settings .form-table td {
+        padding: 20px 15px;
+        display: block;
+        margin-bottom: 15px;
+    }
+    
+    .wp-debug-switcher-container {
+        flex-direction: column;
+    }
+    
+    .wp-debug-help-content {
+        flex-direction: column;
+    }
+    
+    .help-column {
+        width: 100%;
+    }
+    
+    .status-item {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+    
+    .wp-debug-switcher-settings, 
+    .wp-debug-switcher-log-viewer,
+    .wp-debug-help-section {
+        padding: 20px;
+    }
+    
+    .attribution-option {
+        text-align: left;
+    }
+    
+    .attribution-switch {
+        justify-content: flex-start;
+    }
+}
